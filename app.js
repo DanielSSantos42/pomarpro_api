@@ -20,6 +20,7 @@ var produtoRouter = require('./routes/produto.route');
 var cadastroRouter = require('./routes/cadastro.route');
 var movimentoRouter = require('./routes/movimento.route');
 var colheitaRouter = require('./routes/colheita.route');
+var arvoreRouter = require ('./routes/arvore.route')
 
 
 // view engine setup
@@ -38,7 +39,8 @@ app.use('/material',materialRouter);
 app.use('/produto',produtoRouter);
 app.use('/cadastro', cadastroRouter);
 app.use('/movimento', movimentoRouter);
-app.use('/colheita', colheitaRouter)
+app.use('/colheita', colheitaRouter);
+app.use('/arvore', arvoreRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

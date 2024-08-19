@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const sql = require('../models/material.model')
+const sql = require('../models/arvore.model')
 
-/* GET users listing. */
-router.get('/materiais', function(req, res, next) {
-  sql.getMateriais().then((resposta)=>{
+router.get('/arvores', function(req, res, next) {
+  sql.getArvores().then((resposta)=>{
     if(resposta instanceof Error){
       res.status(500).send(resposta);
       return;
@@ -13,8 +12,8 @@ router.get('/materiais', function(req, res, next) {
   })
 });
 
-router.get('/material/:id', function(req, res, next) {
-  sql.getMaterialById(req.params.id).then((resposta)=>{
+router.get('/arvore/:id', function(req, res, next) {
+  sql.getArvoreById(req.params.id).then((resposta)=>{
     if(resposta instanceof Error){
       res.status(500).send(resposta);
       return;
@@ -23,9 +22,10 @@ router.get('/material/:id', function(req, res, next) {
   })
 });
 
-router.post('/material', function(req,res){
+
+router.post('/arvore', function(req,res){
   let info = req.body;
-  sql.addMaterial(info.nome, info.valor, info.tipo, info.fornecedor).then((resposta)=>{
+  sql.addArvore(info.defensivo, info.fertilizante, info.ultima_verif, info.linha, info.coluna, info.tipo, info.situacao, info.pomar).then((resposta)=>{
     if(resposta instanceof Error){
       res.status(500).json(resposta);
       return;
@@ -34,18 +34,24 @@ router.post('/material', function(req,res){
   })
 })
 
-router.post('/add',(req,res)=>{
 
+router.post('/add',(req,res)=>{
+ 
   let dados = req.body.info  
 
 
-  sql.addMaterial(
-    dados.nome,
-    dados.valor,
+  sql.addArvore(
+    dados.defensivo,
+    dados.fertilizante,
+    dados.ultima_verif,
+    dados.linha,
+    dados.coluna,
     dados.tipo,
-    dados.fornecedor
+    dados.situacao,
+    dados.pomar
     
   ).then((resposta)=>{
+    console.log(resposta)
      if(resposta instanceof Error){
       res.status(500).json(resposta);
       return;
@@ -56,7 +62,7 @@ router.post('/add',(req,res)=>{
 
 
 router.get('/buscaTodos',(req,res)=>{
-    sql.buscaTodosMateriais().then((resposta)=>{
+    sql.buscaTodosArvores().then((resposta)=>{
       if(resposta instanceof Error){
         res.status(500).json(resposta);
         return;

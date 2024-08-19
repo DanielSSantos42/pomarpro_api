@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const sql = require('../models/movimento.model')
 
-/* GET users listing. */
 router.get('/movimentos', function(req, res, next) {
   sql.getMovimentos().then((resposta)=>{
     if(resposta instanceof Error){
