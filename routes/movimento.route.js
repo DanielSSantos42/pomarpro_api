@@ -40,17 +40,19 @@ router.post('/add',(req,res)=>{
   let dados = req.body.info  
 
 
-  sql.addMovimento(
-    dados.dt_movimento,
-    dados.tipo
-    
-  ).then((resposta)=>{
-    console.log(resposta)
+  sql.addMovimento(dados.tipo).then((resposta)=>{
      if(resposta instanceof Error){
       res.status(500).json(resposta);
       return;
      }
-     res.status(201).json(resposta);
+     console.log(resposta)
+     sql.addItemMovimento(resposta.id,dados.quantidade,dados.produto).then((resposta2)=>{
+      if(resposta2 instanceof Error){
+        res.status(500).json(resposta2);
+        return;
+      }
+      res.status(201).json(resposta2);
+   })
   })
 })
 

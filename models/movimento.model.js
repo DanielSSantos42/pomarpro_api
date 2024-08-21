@@ -26,22 +26,39 @@ async function getMovimentoById(id){
 
 
  
-async function addMovimento(dt_movimento, tipo){
+async function addMovimento(tipo){
     try{
         const [exec] = await conexao.query(`
             insert into tb_movimentacao(
                 dt_movimento, tipo
                 ) values(
-                    ?,?
+                    current_timestamp,?
             )
-        `,[dt_movimento, tipo])
+        `,[tipo])
+          if(exec.affectedRows==1){
+            const [linha] = await conexao.query(`select last_insert_id() as id`);
+            return linha [0];
+        }
+
         return exec.affectedRows;
     }catch(erro){
         return erro;
     }
 }
 
-
+async function addItemMovimento(
+    movimento, quantidade, produto
+) {try{
+      const [exec] = await conexao.query(`
+        insert into tb_mov_item(
+        movimentacao, produto , quantidade)values(?,?,?
+        )`
+      ,[movimento, produto, quantidade]);
+      return exec.affectedRows;
+      }catch(erro){
+        return erro;
+      }
+    }
 
 async function buscaTodosMovimentos(){
     
@@ -49,10 +66,16 @@ async function buscaTodosMovimentos(){
     try{
       let [linhas] = await conexao.query(`
         select 
-          u.id,
-          u.dt_movimento,
-          u.tipo
-          from tb_movimentacao u;
+ p.descricao,
+ p.valor,
+ m.tipo,
+ t.descricao as ds_tipo,
+ mi.quantidade,
+ (p.valor * mi.quantidade) as valor_total
+ from tb_produto p 
+ inner join tb_mov_item mi on mi.produto = p.id
+ inner join tb_movimentacao m on m.id = mi.movimentacao
+ inner join tb_tipo t on t.id = m.tipo
         `)
          
          return linhas;
@@ -68,7 +91,8 @@ module.exports = {
     getMovimentos,
     getMovimentoById,
     addMovimento,
-    buscaTodosMovimentos
+    buscaTodosMovimentos,
+    addItemMovimento 
 
 
 }
