@@ -71,7 +71,8 @@ async function buscaTodosMovimentos(){
  m.tipo,
  t.descricao as ds_tipo,
  mi.quantidade,
- (p.valor * mi.quantidade) as valor_total
+ (p.valor * mi.quantidade) as valor_total,
+ m.dt_movimento
  from tb_produto p 
  inner join tb_mov_item mi on mi.produto = p.id
  inner join tb_movimentacao m on m.id = mi.movimentacao
