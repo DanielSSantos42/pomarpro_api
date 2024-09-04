@@ -48,8 +48,8 @@ async function buscaTodosArvores(){
       let [linhas] = await conexao.query(`
         select 
 	a.id,
-    if(a.defensivo=1,1,0) as defensivo,
-    if(a.fertilizante=1,1,0) as fertilizante,
+    if(a.defensivo=1,'Sim' , 'Não') as defensivo,
+    if(a.fertilizante=1,'Sim' , 'Não') as fertilizante,
     a.ultima_verif,
     a.linha,
     a.coluna,
